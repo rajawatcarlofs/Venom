@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Campaign Management - Telegram Message Manager{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="mb-0"><i class="fas fa-rocket"></i> Campaign Management</h1>
+        <p class="text-muted">Create and manage message campaigns</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCampaignModal"><i class="fas fa-plus"></i> Create Campaign</button>
+    </div>
+</div>
+<ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="allCampaigns-tab" data-bs-toggle="tab" data-bs-target="#allCampaigns" type="button"><i class="fas fa-list"></i> All Campaigns</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="activeCampaigns-tab" data-bs-toggle="tab" data-bs-target="#activeCampaigns" type="button"><i class="fas fa-running"></i> Active</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="completedCampaigns-tab" data-bs-toggle="tab" data-bs-target="#completedCampaigns" type="button"><i class="fas fa-check-circle"></i> Completed</button>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="allCampaigns" role="tabpanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="campaignsTable">
+                        <thead>
+                            <tr>
+                                <th>Campaign Name</th>
+                                <th>Accounts</th>
+                                <th>Groups</th>
+                                <th>Status</th>
+                                <th>Sent / Failed</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="campaignsBody">
+                            <tr><td colspan="7" class="text-center py-4"><div class="spinner-border" role="status"></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="activeCampaigns" role="tabpanel">
+        <div id="activeCampaignsList"></div>
+    </div>
+    <div class="tab-pane fade" id="completedCampaigns" role="tabpanel">
+        <div id="completedCampaignsList"></div>
+    </div>
+</div>
+<div class="modal fade" id="createCampaignModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-plus-circle"></i> Create Campaign</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createCampaignForm">
+                    <div class="mb-3">
+                        <label class="form-label">Campaign Name:</label>
+                        <input type="text" class="form-control" id="campaignName" placeholder="e.g., Summer Promotion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message:</label>
+                        <textarea class="form-control" id="campaignMessage" rows="4" placeholder="Enter message content..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Select Accounts:</label>
+                        <div id="campaignAccounts" class="list-group"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Select Groups:</label>
+                        <input type="text" class="form-control mb-2" id="groupSearch" placeholder="Search groups...">
+                        <div id="campaignGroups" class="list-group" style="max-height: 300px; overflow-y: auto;"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createCampaign()">Create Campaign</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/campaigns.js') }}"></script>
+{% endblock %}

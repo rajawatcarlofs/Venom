@@ -1,0 +1,75 @@
+body.dark-mode {
+    background-color: #111827;
+    color: #f3f4f6;
+}
+.dark-mode .card {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+}
+.dark-mode .card-header {
+    background-color: #111827;
+    border-bottom-color: #374151;
+}
+.dark-mode .table {
+    color: #f3f4f6;
+}
+.dark-mode .table thead th {
+    background-color: #111827;
+    border-bottom-color: #374151;
+    color: #d1d5db;
+}
+.dark-mode .table tbody tr:hover {
+    background-color: #1f2937;
+}
+.dark-mode .form-control,
+.dark-mode .form-select {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+}
+.dark-mode .form-control:focus,
+.dark-mode .form-select:focus {
+    background-color: #1f2937;
+    border-color: #0084ff;
+    color: #f3f4f6;
+}
+.dark-mode .list-group-item {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+}
+.dark-mode .list-group-item:hover {
+    background-color: #111827;
+}
+.dark-mode .nav-tabs {
+    border-bottom-color: #374151;
+}
+.dark-mode .nav-link {
+    color: #d1d5db !important;
+}
+.dark-mode .nav-link.active {
+    background-color: transparent;
+    color: #0084ff !important;
+    border-bottom-color: #0084ff;
+}
+.dark-mode .modal-content {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+}
+.dark-mode .modal-header {
+    background-color: #111827;
+    border-bottom-color: #374151;
+}
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+    color: #f3f4f6;
+}
+.dark-mode .text-muted {
+    color: #9ca3af !important;
+}

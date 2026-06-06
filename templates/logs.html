@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Logs & Monitoring - Telegram Message Manager{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="mb-0"><i class="fas fa-file-alt"></i> Logs & Monitoring</h1>
+        <p class="text-muted">System activity logs and monitoring</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <button class="btn btn-outline-primary me-2" onclick="refreshLogs()"><i class="fas fa-sync"></i> Refresh</button>
+        <button class="btn btn-outline-success" onclick="downloadLogs()"><i class="fas fa-download"></i> Download</button>
+    </div>
+</div>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Filter by Level:</label>
+                <select class="form-select" id="logLevelFilter" onchange="loadLogs()">
+                    <option value="">All Levels</option>
+                    <option value="info">Info</option>
+                    <option value="success">Success</option>
+                    <option value="warning">Warning</option>
+                    <option value="error">Error</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Search:</label>
+                <input type="text" class="form-control" id="logSearch" placeholder="Search logs..." onkeyup="loadLogs()">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div id="logsList" style="max-height: 600px; overflow-y: auto;">
+            <div class="text-center py-4"><div class="spinner-border" role="status"></div></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    function loadLogs() {
+        const level = document.getElementById('logLevelFilter').value;
+        const search = document.getElementById('logSearch').value;
+        fetch('/api/logs?limit=100').then(res => res.json()).then(logs => {
+            let filtered = logs;
+            if (level) filtered = filtered.filter(l => l.level === level);
+            if (search) filtered = filtered.filter(l => l.activity.toLowerCase().includes(search.toLowerCase()));
+            displayLogs(filtered);
+        }).catch(err => console.error('Error:', err));
+    }
+    function displayLogs(logs) {
+        const html = `<table class="table table-sm table-hover mb-0"><thead><tr><th>Time</th><th>Level</th><th>Activity</th></tr></thead><tbody>${logs.map(log => `<tr><td><small>${new Date(log.timestamp).toLocaleString()}</small></td><td><span class="badge bg-${getLogBadgeColor(log.level)}">${log.level.toUpperCase()}</span></td><td>${log.activity}</td></tr>`).join('')}</tbody></table>`;
+        document.getElementById('logsList').innerHTML = html;
+    }
+    function getLogBadgeColor(level) {
+        const colors = {'info': 'info', 'success': 'success', 'warning': 'warning', 'error': 'danger'};
+        return colors[level] || 'secondary';
+    }
+    function refreshLogs() { loadLogs(); }
+    function downloadLogs() {
+        fetch('/api/logs/export').then(res => res.json()).then(data => {
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `logs-${new Date().toISOString()}.json`;
+            a.click();
+        });
+    }
+    loadLogs();
+    setInterval(loadLogs, 5000);
+</script>
+{% endblock %}

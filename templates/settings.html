@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Settings - Telegram Message Manager{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1 class="mb-0"><i class="fas fa-cog"></i> Settings</h1>
+        <p class="text-muted">Application settings and configuration</p>
+    </div>
+</div>
+<ul class="nav nav-tabs mb-4" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button"><i class="fas fa-sliders-h"></i> General</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button"><i class="fas fa-shield-alt"></i> Security</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="telegram-tab" data-bs-toggle="tab" data-bs-target="#telegram" type="button"><i class="fas fa-paper-plane"></i> Telegram API</button>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="general" role="tabpanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form id="generalSettingsForm">
+                    <div class="mb-3">
+                        <label class="form-label">Message Delay (seconds):</label>
+                        <input type="number" class="form-control" id="messageDelay" min="1" value="2">
+                        <small class="form-text text-muted">Delay between sending messages to different groups</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Random Delay Range (seconds):</label>
+                        <input type="number" class="form-control" id="randomDelay" min="0" value="1">
+                        <small class="form-text text-muted">Add random delay up to this value</small>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="saveGeneralSettings()"><i class="fas fa-save"></i> Save Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="security" role="tabpanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="alert alert-info"><i class="fas fa-info-circle"></i> Password changes require editing the .env file directly for security reasons.</div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="telegram" role="tabpanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="alert alert-info"><i class="fas fa-info-circle"></i> Get your API credentials from <a href="https://my.telegram.org" target="_blank">https://my.telegram.org</a></div>
+                <p class="text-muted">API credentials are configured in the .env file and cannot be changed from this panel.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    function saveGeneralSettings() {
+        const settings = {
+            message_delay: document.getElementById('messageDelay').value,
+            random_delay: document.getElementById('randomDelay').value
+        };
+        fetch('/api/settings/update', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(settings)})
+        .then(res => res.json())
+        .then(data => alert(data.success ? 'Settings saved!' : 'Error saving settings'));
+    }
+</script>
+{% endblock %}
